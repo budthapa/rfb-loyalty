@@ -39,13 +39,13 @@ task copyDockerFiles(type: Copy) {
     exclude "**/*.yml"
 }
 
-def imageName = 'budthapa/requestforbeerimage';
+def dockerImageName = 'budthapa/requestforbeerimage';
 
 task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
     description = "Package application as Docker image"
     group = "Docker"
     inputDir = project.file("${project.buildDir}/docker")
-    tags = ["${imageName}:latest".toString(), "${imageName}:${project.version}".toString()]
+    tags = ["${dockerImageName}:latest".toString(), "${dockerImageName}:${project.version}".toString()]
 }
 
 /**
@@ -54,7 +54,7 @@ task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
  * Note: at this time the plugin does not support pushing multiple tags
  */
 task pushDockerLatest(type: DockerPushImage, dependsOn: 'buildDocker') {
-    imageName = imageName
+    imageName = dockerImageName
     tag = "latest"
 }
 
@@ -62,6 +62,6 @@ task pushDockerLatest(type: DockerPushImage, dependsOn: 'buildDocker') {
  * Use to push project version tag to docker hub
  */
 task pushDockerVersionTag(type: DockerPushImage, dependsOn: 'buildDocker') {
-    imageName = imageName
+    imageName = dockerImageName
     tag =  "${project.version}".toString()
 }
