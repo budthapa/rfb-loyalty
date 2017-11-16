@@ -25,7 +25,7 @@ docker {
         //url default value
         //url = 'https://hub.docker.com'
         username = 'budthapa'
-        password = (System.env.DOCKER_HUB_PWD)
+        password = (System.env.DOCKER_HUB_PWD) //set this password in circle Environment Variables
         email = 'budthapa@gmail.com'
     }
 }
@@ -45,7 +45,7 @@ task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
     description = "Package application as Docker image"
     group = "Docker"
     inputDir = project.file("${project.buildDir}/docker")
-    tags = ["${imageName}:latest".toString(), "imageName:${project.version}".toString()]
+    tags = ["${imageName}:latest".toString(), "${imageName}:${project.version}".toString()]
 }
 
 /**
